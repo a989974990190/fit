@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Fitness Tracker</title>
+  <title>Selfie Tracker</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Arial', sans-serif;
-      background: #f2f2f2;
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
       overflow-x: hidden;
     }
 
     .header {
-      background: linear-gradient(135deg, #4a90e2, #007bff);
+      background: linear-gradient(135deg, #ff5e62, #ff9966);
       color: white;
       text-align: center;
       padding: 25px 10px;
@@ -41,10 +41,8 @@
 
     .photo-card img {
       width: 100%;
-      height: auto;
-      aspect-ratio: 3/4;
+      aspect-ratio: 9 / 16;
       object-fit: cover;
-      border-bottom: 1px solid #eee;
     }
 
     .photo-card p {
@@ -57,13 +55,13 @@
     .plusBtn, .slideBtn {
       position: fixed;
       bottom: 20px;
-      width: 52px;
-      height: 52px;
+      width: 54px;
+      height: 54px;
       font-size: 28px;
       border-radius: 50%;
       border: none;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      background: #007bff;
+      background: #ff5e62;
       color: white;
       cursor: pointer;
       z-index: 100;
@@ -116,10 +114,10 @@
       flex-direction: column;
     }
 
-    #slideshow img {
-      max-width: 90vw;
-      max-height: 80vh;
-      border-radius: 15px;
+    #slideImg {
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
     }
 
     .closeSlide {
@@ -134,18 +132,11 @@
       font-size: 4vw;
       cursor: pointer;
     }
-
-    @media screen and (max-height: 500px) {
-      .captureBtn {
-        bottom: 4vh;
-        font-size: 12px;
-      }
-    }
   </style>
 </head>
 <body>
 
-  <div class="header">📸 Fitness Tracker</div>
+  <div class="header">📸 Selfie Tracker</div>
   <div class="gallery" id="gallery"></div>
 
   <button class="plusBtn" onclick="startCamera()">+</button>
@@ -156,7 +147,7 @@
     <button class="captureBtn" onclick="capturePhoto()">📷 Capture</button>
   </div>
 
-  <canvas id="canvas" width="300" height="300" style="display:none;"></canvas>
+  <canvas id="canvas" width="900" height="1600" style="display:none;"></canvas>
 
   <div id="slideshow" style="display: none; flex;">
     <button class="closeSlide" onclick="stopSlideshow()">✖</button>
@@ -172,11 +163,14 @@
 
     async function startCamera() {
       try {
-        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "user" },
+          audio: false
+        });
         document.getElementById("startScreen").style.display = "flex";
         document.getElementById("video").srcObject = stream;
       } catch (err) {
-        alert("Camera permission denied or not supported on this device.");
+        alert("Camera access denied or not available.");
         console.error(err);
       }
     }
@@ -232,7 +226,7 @@
       slideInterval = setInterval(() => {
         slideIndex = (slideIndex + 1) % slidePhotos.length;
         document.getElementById("slideImg").src = slidePhotos[slideIndex].data;
-      }, 2000);
+      }, 1500);
     }
 
     function stopSlideshow() {
