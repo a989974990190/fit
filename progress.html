@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fitness Tracker</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f2f2f2;
+      overflow-x: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #4a90e2, #007bff);
+      color: white;
+      text-align: center;
+      padding: 25px 10px;
+      font-size: 6vw;
+      border-bottom-left-radius: 30px;
+      border-bottom-right-radius: 30px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(42vw, 1fr));
+      gap: 12px;
+      padding: 16px;
+    }
+
+    .photo-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      text-align: center;
+      font-size: 4vw;
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      border-bottom: 1px solid #eee;
+    }
+
+    .photo-card p {
+      margin: 6px 0;
+      font-weight: bold;
+      font-size: 3.5vw;
+      color: #333;
+    }
+
+    .plusBtn, .slideBtn {
+      position: fixed;
+      bottom: 20px;
+      width: 52px;
+      height: 52px;
+      font-size: 28px;
+      border-radius: 50%;
+      border: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+      z-index: 100;
+    }
+
+    .plusBtn { right: 20px; }
+    .slideBtn { left: 20px; }
+
+    #startScreen {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      flex-direction: column;
+    }
+
+    video {
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+    }
+
+    .captureBtn {
+      position: absolute;
+      bottom: 6vh;
+      background: white;
+      color: black;
+      font-size: 4vw;
+      padding: 10px 20px;
+      border-radius: 25px;
+      border: none;
+      cursor: pointer;
+    }
+
+    #slideshow {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    #slideshow img {
+      max-width: 90vw;
+      max-height: 80vh;
+      border-radius: 15px;
+    }
+
+    .closeSlide {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: red;
+      color: white;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 10px;
+      font-size: 4vw;
+      cursor: pointer;
+    }
+
+    @media screen and (max-height: 500px) {
+      .captureBtn {
+        bottom: 4vh;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">📸 Fitness Tracker</div>
+  <div class="gallery" id="gallery"></div>
+
+  <button class="plusBtn" onclick="startCamera()">+</button>
+  <button class="slideBtn" onclick="startSlideshow()">▶</button>
+
+  <div id="startScreen" style="display: none; flex;">
+    <video id="video" autoplay playsinline></video>
+    <button class="captureBtn" onclick="capturePhoto()">📷 Capture</button>
+  </div>
+
+  <canvas id="canvas" width="300" height="300" style="display:none;"></canvas>
+
+  <div id="slideshow" style="display: none; flex;">
+    <button class="closeSlide" onclick="stopSlideshow()">✖</button>
+    <img id="slideImg" src="" alt="Slide Image">
+  </div>
+
+  <script>
+    let stream = null;
+    let dayCount = parseInt(localStorage.getItem("dayCount")) || 1;
+    let slideIndex = 0;
+    let slidePhotos = [];
+    let slideInterval;
+
+    async function startCamera() {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
+        document.getElementById("startScreen").style.display = "flex";
+        document.getElementById("video").srcObject = stream;
+      } catch (err) {
+        alert("Camera permission denied or not supported on this device.");
+        console.error(err);
+      }
+    }
+
+    function capturePhoto() {
+      const video = document.getElementById("video");
+      const canvas = document.getElementById("canvas");
+      const context = canvas.getContext("2d");
+
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const photoData = canvas.toDataURL("image/png");
+      const dayLabel = `Day ${dayCount}`;
+
+      const photos = JSON.parse(localStorage.getItem("photoGallery")) || [];
+      photos.unshift({ data: photoData, label: dayLabel });
+      localStorage.setItem("photoGallery", JSON.stringify(photos));
+      dayCount++;
+      localStorage.setItem("dayCount", dayCount);
+
+      stopCamera();
+      renderPhotos();
+    }
+
+    function stopCamera() {
+      document.getElementById("startScreen").style.display = "none";
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
+      }
+    }
+
+    function renderPhotos() {
+      const gallery = document.getElementById("gallery");
+      const photos = JSON.parse(localStorage.getItem("photoGallery")) || [];
+      gallery.innerHTML = '';
+
+      photos.forEach(photo => {
+        const card = document.createElement("div");
+        card.className = "photo-card";
+        card.innerHTML = `<img src="${photo.data}" alt="${photo.label}"><p>${photo.label}</p>`;
+        gallery.appendChild(card);
+      });
+    }
+
+    function startSlideshow() {
+      slidePhotos = JSON.parse(localStorage.getItem("photoGallery")) || [];
+      if (slidePhotos.length === 0) return;
+
+      slideIndex = 0;
+      document.getElementById("slideshow").style.display = "flex";
+      document.getElementById("slideImg").src = slidePhotos[slideIndex].data;
+
+      slideInterval = setInterval(() => {
+        slideIndex = (slideIndex + 1) % slidePhotos.length;
+        document.getElementById("slideImg").src = slidePhotos[slideIndex].data;
+      }, 2000);
+    }
+
+    function stopSlideshow() {
+      clearInterval(slideInterval);
+      document.getElementById("slideshow").style.display = "none";
+    }
+
+    window.onload = renderPhotos;
+  </script>
+</body>
+</html>

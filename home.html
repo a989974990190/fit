@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ACE FFITNESS</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      color: #222;
+    }
+
+    header {
+      background-color: #ffffff;
+      padding: 15px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .task-bar {
+      background: #fff;
+      margin: 20px auto 10px;
+      padding: 35px 15px;
+      border-radius: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 18px;
+      width: 90%;
+      cursor: pointer;
+    }
+
+    .task-list {
+      width: 90%;
+      margin: 10px auto;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .task-list a {
+      background-color: #fff;
+      padding: 12px 15px;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      text-decoration: none;
+      color: #222;
+      font-size: 15px;
+    }
+
+    .top-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  margin: 25px auto;
+  width: 90%;
+}
+
+.square-btn {
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  padding: 20px 10px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  flex: 1;
+}
+    .square-btn img {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 8px;
+    }
+
+    .circle-buttons {
+      margin: 10px auto 40px;
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      width: 90%;
+    }
+
+    .btn-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 70px;
+      margin: 10px;
+    }
+
+    .circle-btn {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background-color: #ffffff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 5px;
+      cursor: pointer;
+    }
+
+    .circle-btn img {
+      width: 26px;
+      height: 26px;
+    }
+
+    .btn-caption {
+      font-size: 11px;
+      text-align: center;
+    }
+
+    .product-section {
+      width: 100%;
+      margin: 40px 0;
+    }
+
+    .product-slider {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      gap: 20px;
+      padding: 10px 5%;
+    }
+
+    .product-card {
+      background: linear-gradient(145deg, #ffffff, #f0f0f0);
+      border-radius: 16px;
+      padding: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+      text-align: center;
+      width: 150px;
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+      text-decoration: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .product-card img {
+      width: 100%;
+      max-width: 100px;
+      margin-bottom: 10px;
+    }
+
+    .product-card div {
+      font-size: 15px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    @media (min-width: 600px) {
+      .top-buttons {
+        flex-direction: row;
+      }
+      .square-btn {
+        width: 48%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>ACE FITNESS</header>
+
+  <!-- Task Bar -->
+  <div class="task-bar" onclick="toggleTasks()">📋 Tap to View Tasks</div>
+
+  <!-- Task List -->
+  <div class="task-list" id="taskList">
+    <a href="#workout">Workout Plans</a>
+    <a href="#meals">Meal Guides</a>
+    <a href="#trainers">Our Trainers</a>
+    <a href="#membership">Membership Info</a>
+    <a href="#progress">Track Progress</a>
+  </div>
+
+  <!-- Top Buttons -->
+  <div class="top-buttons">
+    <div class="square-btn" onclick="window.location.href='#workouts'">
+      <img src="https://cdn-icons-png.flaticon.com/512/2622/2622842.png" alt="Workouts">
+      <div>Workouts</div>
+    </div>
+    <div class="square-btn" onclick="window.location.href='#meals'">
+      <img src="https://cdn-icons-png.flaticon.com/512/3523/3523063.png" alt="Meals">
+      <div>Meals</div>
+    </div>
+  </div>
+
+  <!-- Circle Buttons -->
+  <div class="circle-buttons">
+    <div class="btn-block">
+      <div class="circle-btn" onclick="window.location.href='donate.html'">
+        <img src="https://cdn-icons-png.flaticon.com/512/3064/3064197.png" alt="Workout">
+      </div>
+      <div class="btn-caption">Secrets</div>
+    </div>
+  
+
+    <div class="btn-block">
+      <div class="circle-btn" onclick="window.location.href='#meals'">
+        <img src="https://cdn-icons-png.flaticon.com/512/3523/3523063.png" alt="Meals">
+      </div>
+      <div class="btn-caption">Trainers</div>
+    </div>
+
+    <div class="btn-block">
+      <div class="circle-btn" onclick="window.location.href='https://www.instagram.com/ace.fitness.india?igsh=MW52enE5MmZ0ZXBrZA%3D%3D'">
+        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram">
+      </div>
+      <div class="btn-caption">Follow Us</div>
+    </div>
+
+    <div class="btn-block">
+      <div class="circle-btn" onclick="window.location.href='progress.html'">
+        <img src="https://cdn-icons-png.flaticon.com/512/1828/1828919.png" alt="Progress">
+      </div>
+      <div class="btn-caption">Progress</div>
+    </div>
+    
+  <!-- Product Section -->
+  <div class="product-section">
+    <h2 style="text-align: center; font-size: 24px; margin-bottom: 20px;"> < TOP DEALS></h2>
+    <div class="product-slider">
+      <a href="https://example.com/product1" target="_blank" class="product-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" alt="Protein">
+        <div>Whey Protein</div>
+      </a>
+      <a href="https://example.com/product2" target="_blank" class="product-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/3534/3534033.png" alt="Creatine">
+        <div>Creatine</div>
+      </a>
+      <a href="https://example.com/product3" target="_blank" class="product-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/3274/3274250.png" alt="Fat Burner">
+        <div>Fat Burner</div>
+      </a>
+      <a href="https://example.com/product4" target="_blank" class="product-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/3523/3523099.png" alt="Multivitamins">
+        <div>Multivitamins</div>
+      </a>
+      <a href="https://example.com/product5" target="_blank" class="product-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/3177/3177363.png" alt="Preworkout">
+        <div>Pre-Workout</div>
+      </a>
+      <a href="https://example.com/product6" target="_blank" class="product-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/3703/3703626.png" alt="Shaker">
+        <div>Shaker Bottle</div>
+      </a>
+      <a href="https://example.com/product7" target="_blank" class="product-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/9530/9530804.png" alt="BCAA">
+        <div>BCAA</div>
+      </a>
+      <a href="https://example.com/product8" target="_blank" class="product-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/3132/3132693.png" alt="Omega 3">
+        <div>Omega 3</div>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    function toggleTasks() {
+      const taskList = document.getElementById("taskList");
+      taskList.style.display = taskList.style.display === "flex" ? "none" : "flex";
+    }
+  </script>
+</body>
+</html>
